@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assistance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="indicator"></div>
+
+<p id="transcription"></p>
+<p id="caption"></p>
+<p id="timer"></p>
+
+<script src="scripts/speech-to-text.js"></script>
+<script src="scripts/deepseek.js"></script>
+<script src="scripts/text-to-speech.js"></script>
+
+<script>
+    const speechToText = new SpeechToText();
+    const textToSpeech = new TextToSpeech();
+    const deepSeek = new DeepSeek();
+
+    speechToText.onfinish = async (text) => {
+        speechToText.stop()
+
+        const answer = await deepSeek.ask(text)
+        await textToSpeech.speak(answer)
+
+        speechToText.start()
+    };
+
+    // auto start
+    window.onload = () => speechToText.start();
+</script>
+</body>
+</html>
